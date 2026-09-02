@@ -1,4 +1,21 @@
 (function () {
+  function decorateHeader() {
+    var bar = document.querySelector(".topbar");
+    if (!bar || bar.querySelector(".nav-pill")) return;
+    var stats = document.createElement("div");
+    stats.className = "header-stats";
+    stats.innerHTML = "<p><b>8+</b> YEARS <span>OF CREATIVITY</span></p><p><b>750+</b> VIDEOS <span>DELIVERED</span></p><p><b>120+</b> BRANDS <span>TRUSTED</span></p>";
+    var pill = document.createElement("div");
+    pill.className = "nav-pill";
+    while (bar.firstChild) pill.appendChild(bar.firstChild);
+    var dots = pill.querySelector(".dots");
+    if (dots) {
+      dots.innerHTML = "<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>";
+    }
+    bar.appendChild(stats);
+    bar.appendChild(pill);
+  }
+  decorateHeader();
   var overlay = document.getElementById("overlay");
   var dim = document.getElementById("overlay-dim");
   var openBtn = document.getElementById("open-menu");
@@ -27,7 +44,8 @@
     document.body.classList.add("menu-open");
     if (dim) dim.classList.add("is-open");
     if (overlay) overlay.classList.add("is-open");
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
   }
   function closeMenu() {
     menuOpen = false;
@@ -36,6 +54,7 @@
     if (dim) dim.classList.remove("is-open");
     if (overlay) overlay.classList.remove("is-open");
     document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
   }
 
   if (openBtn) openBtn.onclick = openMenu;
@@ -172,19 +191,37 @@
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var currentY = window.scrollY || 0;
   var targetY = currentY;
+  var lastTouchY = null;
+  function maxScroll() {
+    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  }
+  function nudgeScroll(dy) {
+    targetY += dy;
+    var max = maxScroll();
+    if (targetY < 0) targetY = 0;
+    if (targetY > max) targetY = max;
+  }
   if (!reduce) {
-    window.addEventListener("wheel", function (e) {
-      if (menuOpen) return;
+    document.addEventListener("wheel", function (e) {
       e.preventDefault();
-      targetY += e.deltaY;
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      if (targetY < 0) targetY = 0;
-      if (targetY > max) targetY = max;
-    }, { passive: false });
+      nudgeScroll(e.deltaY);
+    }, { passive: false, capture: true });
+    document.addEventListener("touchstart", function (e) {
+      if (e.touches[0]) lastTouchY = e.touches[0].clientY;
+    }, { passive: true, capture: true });
+    document.addEventListener("touchmove", function (e) {
+      if (!menuOpen || lastTouchY == null || !e.touches[0]) return;
+      var y = e.touches[0].clientY;
+      nudgeScroll(lastTouchY - y);
+      lastTouchY = y;
+      e.preventDefault();
+    }, { passive: false, capture: true });
     (function loop() {
+      var max = maxScroll();
+      if (targetY > max) targetY = max;
       currentY += (targetY - currentY) * 0.075;
       if (Math.abs(targetY - currentY) < 0.4) currentY = targetY;
-      if (!menuOpen) window.scrollTo(0, currentY);
+      window.scrollTo(0, currentY);
       requestAnimationFrame(loop);
     })();
   }
