@@ -53,7 +53,44 @@ img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
 ::selection { background: var(--red); color: #fff; }
-.section, .page, .page-hero, .hero-wrap, footer, .filmstrip { position: relative; z-index: 2; }
+#stage {
+  position: relative; z-index: 2;
+  transform-origin: center top;
+  transition: transform .9s cubic-bezier(.16,1,.3,1), filter .9s ease, opacity .7s ease;
+  will-change: transform, filter;
+}
+body.menu-open #stage {
+  transform: scale(.935);
+  filter: blur(12px) saturate(1.2);
+}
+body.is-peeking .overlay-dim {
+  background: rgba(0,0,0,.12);
+  backdrop-filter: blur(8px);
+}
+body.is-peeking .overlay {
+  background: rgba(16,16,16,.5);
+  transform: scale(.985);
+}
+body.is-peeking #stage {
+  transform: scale(.97);
+  filter: blur(3px) saturate(1.1);
+}
+#stage.is-swap {
+  animation: peekIn 1s cubic-bezier(.16,1,.3,1);
+}
+@keyframes peekIn {
+  from { opacity: .35; transform: translateY(36px) scale(.96); filter: blur(16px); }
+  to { opacity: 1; transform: scale(.97); filter: blur(3px); }
+}
+body.is-peeking .page-hero h1,
+body.is-peeking .hero-inner h1 {
+  animation: titleGlitch .7s steps(2) 2;
+}
+@keyframes titleGlitch {
+  0% { text-shadow: 4px 0 var(--red), -4px 0 cyan; transform: translate(2px,0); }
+  50% { text-shadow: -5px 1px var(--red), 3px 0 cyan; transform: translate(-2px,1px); }
+  100% { text-shadow: none; transform: none; }
+}
 
 .glows { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .glows span {
@@ -114,24 +151,26 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 
 .overlay-dim {
   position: fixed; inset: 0; z-index: 80;
-  background: rgba(0,0,0,.55); backdrop-filter: blur(12px);
+  background: rgba(0,0,0,.32); backdrop-filter: blur(18px) saturate(1.15);
   opacity: 0; visibility: hidden; pointer-events: none;
-  transition: opacity .45s ease, visibility .45s;
+  transition: opacity .85s cubic-bezier(.16,1,.3,1), visibility .85s, background .7s, backdrop-filter .7s;
 }
 .overlay-dim.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
 
 .overlay {
   position: fixed; z-index: 85;
-  left: 3.5vw; right: 3.5vw; top: 3vh; bottom: 3vh;
-  max-width: 1180px; margin-inline: auto;
-  height: auto; max-height: 94vh;
+  left: 6vw; right: 6vw; top: 5vh; bottom: 5vh;
+  max-width: 1120px; margin-inline: auto;
+  height: auto; max-height: 90vh;
   display: flex; flex-direction: column;
-  background: #141414;
-  border: 1px solid rgba(255,255,255,.08);
-  transform: translateY(-24px) scale(.985);
+  background: rgba(16,16,16,.68);
+  backdrop-filter: blur(22px) saturate(1.2);
+  border: 1px solid rgba(255,255,255,.1);
+  transform: translateY(-8%) scale(.96);
   opacity: 0; visibility: hidden; pointer-events: none;
-  transition: transform .55s cubic-bezier(.76,0,.24,1), opacity .4s ease, visibility .4s;
+  transition: transform .9s cubic-bezier(.16,1,.3,1), opacity .7s ease, visibility .7s, background .6s;
   overflow: hidden;
+  will-change: transform, opacity;
 }
 .overlay.is-open {
   transform: none; opacity: 1; visibility: visible; pointer-events: auto;
@@ -173,6 +212,13 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .nav-grid a:hover { background: var(--red); }
 .nav-grid a:hover .num { color: #fff; }
 .nav-grid a:hover .preview { opacity: 1; animation: rgb-shift .35s steps(2) infinite; }
+.nav-grid a::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(255,255,255,.55) 1px, transparent 1.4px);
+  background-size: 5px 5px; opacity: 0; mix-blend-mode: overlay;
+  transition: opacity .25s;
+}
+.nav-grid a:hover::after { opacity: .4; }
 .overlay-foot {
   display: grid; gap: 10px;
   padding: 18px 18px 0; border-top: 1px solid rgba(255,255,255,.12);
@@ -360,10 +406,20 @@ details summary {
 details summary::-webkit-details-marker { display: none; }
 details p { margin-top: 10px; font-size: 15px; }
 
-footer { padding: 16px 0 32px; }
+footer { padding: 0; }
+footer .marquee { background: var(--red); padding: 12px 0; }
+footer .marquee .pill-dark {
+  background: transparent; color: #fff;
+  font-size: 15px; letter-spacing: .18em; font-weight: 700;
+}
 .foot-box {
-  max-width: 1440px; margin: 16px auto 0; background: var(--black);
-  border-radius: var(--radius); padding: 32px 36px;
+  max-width: none; margin: 0; background: var(--red);
+  border-radius: 0; padding: 36px 4vw 28px;
+}
+.foot-box .logo {
+  font-family: Inter, system-ui, sans-serif; font-style: normal;
+  font-weight: 800; text-transform: uppercase; color: #fff;
+  font-size: clamp(42px, 12vw, 140px); letter-spacing: -0.06em; line-height: .85;
 }
 .muted { color: var(--muted); }
 .page { padding: 36px 22px 72px; max-width: 1440px; margin: 0 auto; }
@@ -426,8 +482,8 @@ footer { padding: 16px 0 32px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track, .media:hover img, .overlay nav a:hover { animation: none; }
-  .stack img { transition: none; }
+  .marquee-track, .media:hover img, .overlay nav a:hover, .glows span, #stage.is-swap { animation: none; }
+  .stack img, .overlay, .overlay-dim, #stage { transition: none; }
 }
 @media (max-width: 800px) {
   .stack { min-height: 360px; }
@@ -439,4 +495,5 @@ footer { padding: 16px 0 32px; }
   .nav-grid a:nth-child(3n) { border-right: 1px solid rgba(255,255,255,.12); }
   .nav-grid a:nth-child(2n) { border-right: 0; }
   .overlay { left: 10px; right: 10px; top: 10px; bottom: 10px; }
+  body.menu-open #stage { transform: scale(.97); filter: blur(8px); }
 }
