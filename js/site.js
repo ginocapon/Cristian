@@ -38,4 +38,20 @@
       });
     };
   });
+
+  var show = document.getElementById("services");
+  if (show) {
+    var slides = show.querySelectorAll(".slide");
+    var nav = show.querySelectorAll(".slide-nav button");
+    var i = 0;
+    function go(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach(function (s, idx) { s.classList.toggle("is-on", idx === i); });
+      nav.forEach(function (b, idx) { b.classList.toggle("on", idx === i); });
+    }
+    nav.forEach(function (b) {
+      b.onclick = function () { go(parseInt(b.getAttribute("data-slide"), 10)); };
+    });
+    setInterval(function () { go(i + 1); }, 5600);
+  }
 })();
