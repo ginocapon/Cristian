@@ -1,16 +1,35 @@
 (function () {
   var overlay = document.getElementById("overlay");
+  var dim = document.getElementById("overlay-dim");
   var openBtn = document.getElementById("open-menu");
   var closeBtn = document.getElementById("close-menu");
-  if (openBtn) openBtn.onclick = function () { overlay.classList.add("open"); document.body.style.overflow = "hidden"; };
-  if (closeBtn) closeBtn.onclick = function () { overlay.classList.remove("open"); document.body.style.overflow = ""; };
+
+  function openMenu() {
+    if (dim) dim.classList.add("is-open");
+    if (overlay) overlay.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+  function closeMenu() {
+    if (dim) dim.classList.remove("is-open");
+    if (overlay) overlay.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  if (openBtn) openBtn.onclick = openMenu;
+  if (closeBtn) closeBtn.onclick = closeMenu;
+  if (dim) dim.onclick = closeMenu;
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeMenu();
+  });
 
   function tick() {
     var t = new Date().toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", second: "2-digit" });
     var clock = document.getElementById("clock");
     var hero = document.getElementById("clock-hero");
+    var strip = document.getElementById("clock-strip");
     if (clock) clock.textContent = t;
     if (hero) hero.textContent = t;
+    if (strip) strip.textContent = t;
   }
   tick();
   setInterval(tick, 1000);
@@ -19,8 +38,9 @@
   if (copy) {
     copy.onclick = function () {
       navigator.clipboard.writeText("hello@cristian.film").then(function () {
+        var prev = copy.innerHTML;
         copy.textContent = "Copied";
-        setTimeout(function () { copy.textContent = "hello@cristian.film"; }, 1400);
+        setTimeout(function () { copy.innerHTML = prev; }, 1400);
       });
     };
   }

@@ -7,29 +7,44 @@
   <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
+  <div class="glows" aria-hidden="true"><span class="g1"></span><span class="g2"></span></div>
+  <div class="tech-grid" aria-hidden="true"></div>
+
   <header class="topbar">
-    <a class="logo" href="index.html">Cristian</a>
-    <button class="menu-btn" id="open-menu" type="button">Menu</button>
+    <a class="logo" href="index.html"><span class="mark"></span> Cristian</a>
+    <button class="menu-btn" id="open-menu" type="button">Menu <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
   </header>
 
+  <div class="overlay-dim" id="overlay-dim"></div>
   <div class="overlay" id="overlay">
-    <div class="overlay-top">
-      <a class="logo" href="index.html">Cristian</a>
-      <button class="menu-btn" id="close-menu" type="button">Close</button>
+    <div class="overlay-bar">
+      <a class="logo" href="index.html"><span class="mark"></span> Cristian</a>
+      <button class="menu-btn" id="close-menu" type="button">Close <span style="font-size:18px;line-height:1">×</span></button>
     </div>
-    <nav>
-      <a href="index.html"><span class="num">[01]</span> Home</a>
-      <a href="works/index.html"><span class="num">[02]</span> Works</a>
-      <a href="gallery/index.html"><span class="num">[03]</span> Gallery</a>
-      <a href="insights/index.html"><span class="num">[04]</span> Insights</a>
-      <a href="about/index.html"><span class="num">[05]</span> About</a>
-      <a href="contact/index.html"><span class="num">[06]</span> Contact</a>
+    <nav class="nav-grid">
+      <a href="index.html"><span class="num">[01]</span> Home<img class="preview" src="img/cristian.webp" alt=""></a>
+      <a href="works/index.html"><span class="num">[02]</span> Works<img class="preview" src="img/work-01.jpg" alt=""></a>
+      <a href="gallery/index.html"><span class="num">[03]</span> Gallery<img class="preview" src="img/gal-01.jpg" alt=""></a>
+      <a href="insights/index.html"><span class="num">[04]</span> Insights<img class="preview" src="img/blog-01.jpg" alt=""></a>
+      <a href="about/index.html"><span class="num">[05]</span> About<img class="preview" src="img/cristian.webp" alt=""></a>
+      <a href="contact/index.html"><span class="num">[06]</span> Contact<img class="preview" src="img/work-08.webp" alt=""></a>
+      <a class="wide" href="insights/index.html"><span class="num">[07]</span> Premium Resources</a>
     </nav>
     <div class="overlay-foot">
-      <button type="button" id="copy-email">hello@cristian.film</button>
-      <span id="clock" class="mono"></span>
+      <button class="mail" type="button" id="copy-email">hello@cristian.film <span aria-hidden="true">⧉</span></button>
+      <p class="overlay-meta">New York — Working Worldwide · Sun–Thu 10:00–18:00</p>
+    </div>
+    <div class="socials">
+      <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/></svg></a>
+      <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/></svg></a>
+      <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/></svg></a>
+      <a href="#" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/></svg></a>
+      <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/></svg></a>
+      <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7z"/></svg></a>
     </div>
   </div>
+
+  
 
   <section class="hero-wrap">
     <div class="hero media">
@@ -37,20 +52,9 @@
       <div class="hero-inner">
         <a class="pill pill-ghost" href="contact/index.html">Play Showreel 2026</a>
         <div>
-          <h1>We make videos people remember</h1>
-          <p class="muted">Every frame has a job. Every cut has a purpose. Every project gets the kind of energy that makes people watch, remember, and hit replay.</p>
-          <div class="marquee" style="max-width:420px;margin-top:18px">
-            <div class="marquee-track">
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-              <a class="pill pill-lime" href="works/index.html">View Works</a>
-            </div>
-          </div>
+          <h1>Make videos people remember</h1>
+          <p class="muted" style="text-transform:uppercase;letter-spacing:.08em;font-size:12px">Every frame has a job. Every cut has a purpose. Every project gets the kind of energy that makes people watch, remember, and hit replay.</p>
+          <a class="btn-red" href="works/index.html" style="margin-top:18px">View Works</a>
         </div>
         <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
           <div>
