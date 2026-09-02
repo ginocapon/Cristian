@@ -31,6 +31,7 @@ html {
   scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: auto;
+  touch-action: pan-y;
 }
 body {
   margin: 0;
@@ -42,6 +43,7 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: auto;
+  touch-action: pan-y;
 }
 body::after {
   content: "";
@@ -52,8 +54,9 @@ body::after {
   background-image: url("../img/noise.png");
   background-repeat: repeat;
   background-size: 256px;
-  opacity: 0.28;
-  mix-blend-mode: overlay;
+  opacity: 0.18;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
@@ -63,6 +66,9 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   position: relative; z-index: 2;
   transform-origin: center top;
   transition: transform .9s cubic-bezier(.16,1,.3,1), filter .9s ease, opacity .7s ease;
+}
+body.is-peeking #stage,
+#stage.is-swap {
   will-change: transform, filter;
 }
 body.menu-open #stage {
@@ -98,7 +104,11 @@ body.is-peeking .hero-inner h1 {
   100% { text-shadow: none; transform: none; }
 }
 
-.glows { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.glows {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
 .glows span {
   position: absolute; border-radius: 50%;
   background: var(--red); filter: blur(90px); opacity: .42;
@@ -117,6 +127,8 @@ body.is-peeking .hero-inner h1 {
     linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
   background-size: 100% 25%, 25% 100%;
   opacity: .45;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .serif { font-family: Merriweather, Georgia, serif; }
@@ -182,9 +194,9 @@ body.menu-open .topbar { opacity: 0; pointer-events: none; }
   opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity .85s cubic-bezier(.16,1,.3,1), visibility .85s, background .7s, backdrop-filter .7s;
 }
-.overlay-dim.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
-@media (hover: none), (pointer: coarse) {
-  .overlay-dim.is-open { pointer-events: none; }
+.overlay-dim.is-open {
+  opacity: 1; visibility: visible;
+  pointer-events: none;
 }
 
 .overlay {
@@ -200,7 +212,7 @@ body.menu-open .topbar { opacity: 0; pointer-events: none; }
   opacity: 0; visibility: hidden; pointer-events: none;
   transition: transform .9s cubic-bezier(.16,1,.3,1), opacity .7s ease, visibility .7s, background .6s;
   overflow: hidden;
-  overscroll-behavior: none;
+  overscroll-behavior: contain;
   will-change: transform, opacity;
 }
 .overlay.is-open {
