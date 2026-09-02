@@ -143,9 +143,7 @@
       setTimeout(function () {
         closeMenu();
         navigating = false;
-        window.scrollTo(0, 0);
-        targetY = 0;
-        currentY = 0;
+        resetScrollState(0);
       }, 720);
     }).catch(function () {
       location.href = abs;
@@ -189,38 +187,62 @@
   }
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var useCustomScroll = !reduce && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var currentY = window.scrollY || 0;
   var targetY = currentY;
-  var lastTouchY = null;
+  var wheelVelocity = 0;
+  var wheelActive = false;
+  var wheelTimer = null;
+
   function maxScroll() {
     return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
   }
-  function nudgeScroll(dy) {
-    targetY += dy;
+  function clampTarget() {
     var max = maxScroll();
     if (targetY < 0) targetY = 0;
     if (targetY > max) targetY = max;
   }
-  if (!reduce) {
+  function nudgeScroll(dy) {
+    targetY += dy;
+    clampTarget();
+  }
+  function resetScrollState(y) {
+    var next = typeof y === "number" ? y : 0;
+    currentY = next;
+    targetY = next;
+    wheelVelocity = 0;
+    wheelActive = false;
+    if (wheelTimer) {
+      clearTimeout(wheelTimer);
+      wheelTimer = null;
+    }
+    window.scrollTo(0, next);
+  }
+
+  if (useCustomScroll) {
     document.addEventListener("wheel", function (e) {
       e.preventDefault();
+      wheelActive = true;
+      wheelVelocity = e.deltaY;
       nudgeScroll(e.deltaY);
+      if (wheelTimer) clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(function () {
+        wheelActive = false;
+      }, 80);
     }, { passive: false, capture: true });
-    document.addEventListener("touchstart", function (e) {
-      if (e.touches[0]) lastTouchY = e.touches[0].clientY;
-    }, { passive: true, capture: true });
-    document.addEventListener("touchmove", function (e) {
-      if (!menuOpen || lastTouchY == null || !e.touches[0]) return;
-      var y = e.touches[0].clientY;
-      nudgeScroll(lastTouchY - y);
-      lastTouchY = y;
-      e.preventDefault();
-    }, { passive: false, capture: true });
+
     (function loop() {
-      var max = maxScroll();
-      if (targetY > max) targetY = max;
-      currentY += (targetY - currentY) * 0.075;
-      if (Math.abs(targetY - currentY) < 0.4) currentY = targetY;
+      clampTarget();
+      if (!wheelActive && Math.abs(wheelVelocity) > 0.35) {
+        targetY += wheelVelocity;
+        wheelVelocity *= 0.88;
+        clampTarget();
+        if (targetY <= 0 || targetY >= maxScroll()) wheelVelocity *= 0.55;
+      } else if (!wheelActive) {
+        wheelVelocity = 0;
+      }
+      currentY += (targetY - currentY) * (wheelActive ? 0.14 : 0.085);
+      if (Math.abs(targetY - currentY) < 0.35) currentY = targetY;
       window.scrollTo(0, currentY);
       requestAnimationFrame(loop);
     })();
