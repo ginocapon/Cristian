@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact</title>
+  <link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="../index.html">Cristian</a>
+    <button class="menu-btn" id="open-menu" type="button">Menu</button>
+  </header>
+  <div class="overlay" id="overlay">
+    <div class="overlay-top"><a class="logo" href="../index.html">Cristian</a><button class="menu-btn" id="close-menu" type="button">Close</button></div>
+    <nav>
+      <a href="../index.html"><span class="num">[01]</span> Home</a>
+      <a href="../works/index.html"><span class="num">[02]</span> Works</a>
+      <a href="../gallery/index.html"><span class="num">[03]</span> Gallery</a>
+      <a href="../insights/index.html"><span class="num">[04]</span> Insights</a>
+      <a href="../about/index.html"><span class="num">[05]</span> About</a>
+      <a href="index.html"><span class="num">[06]</span> Contact</a>
+    </nav>
+    <div class="overlay-foot"><button type="button" id="copy-email">hello@cristian.film</button><span id="clock" class="mono"></span></div>
+  </div>
+  <main class="page">
+    <h1>LET’S MAKE SOMETHING WORTH WATCHING.</h1>
+    <p class="lead">Tell us what you’re making, what it needs to do, and what success should feel like. We’ll bring the useful questions and a sensible next step.</p>
+    <div class="cta-row">
+      <button type="button" id="copy-email-page" class="pill pill-lime">hello@cristian.film</button>
+      <span class="pill pill-ghost">New York — Working Worldwide</span>
+      <span class="pill pill-ghost">Sun–Thu · 10:00–18:00</span>
+      <span id="clock-hero" class="mono"></span>
+    </div>
+    <div class="card" style="margin-top:40px;min-height:520px"><img src="../img/cristian.webp" alt="Cristian"></div>
+  </main>
+  <footer>
+    <div class="marquee"><div class="marquee-track">
+      <a class="pill pill-dark" href="index.html">Book a Call</a>
+      <a class="pill pill-dark" href="index.html">Let's Roll</a>
+      <a class="pill pill-dark" href="index.html">Say Hello</a>
+      <a class="pill pill-dark" href="index.html">Let's Plan It</a>
+      <a class="pill pill-dark" href="index.html">Start Creating</a>
+      <a class="pill pill-dark" href="index.html">Book a Call</a>
+      <a class="pill pill-dark" href="index.html">Let's Roll</a>
+      <a class="pill pill-dark" href="index.html">Say Hello</a>
+      <a class="pill pill-dark" href="index.html">Let's Plan It</a>
+      <a class="pill pill-dark" href="index.html">Start Creating</a>
+    </div></div>
+    <div class="foot-box"><p class="logo">Cristian</p><p class="muted">hello@cristian.film</p></div>
+  </footer>
+  <script src="../js/site.js"></script>
+  <script>
+    var b = document.getElementById("copy-email-page");
+    if (b) b.addEventListener("click", function () {
+      navigator.clipboard.writeText("hello@cristian.film").then(function () {
+        b.textContent = "Copied";
+        setTimeout(function () { b.textContent = "hello@cristian.film"; }, 1400);
+      });
+    });
+  </script>
+</body>
+</html>
